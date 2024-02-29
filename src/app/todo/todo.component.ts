@@ -102,6 +102,7 @@ export class TodoComponent {
 
   deleteTodoItem(id: number) {
     if (window.confirm("Are you sure to delete this item??")) {
+      this.todoStore.deleteTodo(id);
     }
   }
 }

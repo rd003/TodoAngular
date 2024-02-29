@@ -8,7 +8,8 @@ import {
   tapResponse,
 } from "@ngrx/component-store";
 import { TodoService } from "./todo.service";
-import { exhaustMap, tap } from "rxjs";
+import { exhaustMap, switchMap, tap } from "rxjs";
+import { trigger } from "@angular/animations";
 
 interface TodoState {
   todos: readonly TodoModel[];
@@ -93,6 +94,20 @@ export class TodoStore
         this.todoService.getTodos().pipe(
           tapResponse(
             (todos: TodoModel[]) => this.addTodos(todos),
+            (error: HttpErrorResponse) => this.setError(error)
+          )
+        )
+      )
+    );
+  });
+
+  readonly addTodo = this.effect<TodoModel>((trigger$) => {
+    return trigger$.pipe(
+      tap((_) => this.setLoading()),
+      switchMap((todoItem) =>
+        this.todoService.addTodo(todoItem).pipe(
+          tapResponse(
+            (todoItemAdded: TodoModel) => this.addTodoItem(todoItemAdded),
             (error: HttpErrorResponse) => this.setError(error)
           )
         )

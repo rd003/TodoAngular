@@ -1,7 +1,12 @@
 import { Component, Injectable, inject } from "@angular/core";
 import { TodoModel } from "./todo.model";
 import { HttpErrorResponse } from "@angular/common/http";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import {
+  ComponentStore,
+  OnStateInit,
+  OnStoreInit,
+  tapResponse,
+} from "@ngrx/component-store";
 import { TodoService } from "./todo.service";
 import { exhaustMap, tap } from "rxjs";
 
@@ -12,7 +17,10 @@ interface TodoState {
 }
 
 @Injectable()
-export class TodoStore extends ComponentStore<TodoState> {
+export class TodoStore
+  extends ComponentStore<TodoState>
+  implements OnStoreInit, OnStateInit
+{
   private todoService = inject(TodoService);
 
   constructor() {
@@ -22,6 +30,10 @@ export class TodoStore extends ComponentStore<TodoState> {
       error: null,
     });
   }
+  ngrxOnStateInit() {
+    this.loadTodos();
+  }
+  ngrxOnStoreInit() {}
   //selectors
   private readonly todos$ = this.select((s) => s.todos);
   private readonly loading$ = this.select((s) => s.loading);

@@ -51,6 +51,9 @@ import { TodoModel } from "./todo.model";
                 }"
                 >{{ todoItem.description }}</span
               >
+              <button type="button" (click)="deleteTodoItem(todoItem.id)">
+                ❌
+              </button>
             </li>
           </ul>
         </ng-template>
@@ -95,5 +98,10 @@ export class TodoComponent {
     todoItem.isCompleted = !todoItem.isCompleted;
     this.todoStore.updateTodo(todoItem);
     // do something
+  }
+
+  deleteTodoItem(id: number) {
+    if (window.confirm("Are you sure to delete this item??")) {
+    }
   }
 }

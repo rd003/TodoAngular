@@ -37,9 +37,18 @@ import { TodoModel } from "./todo.model";
         }}</ng-container>
         <ng-template #noError>
           <ul>
-            <li *ngFor="let todoItem of vm.todos">
-              <input type="checkbox" [value]="todoItem.isCompleted" />
-              {{ todoItem.description }}
+            <li *ngFor="let todoItem of vm.todos; trackBy: trackById">
+              <input
+                type="checkbox"
+                [checked]="todoItem.isCompleted"
+                (click)="toggleCompletion(todoItem)"
+              />
+              <span
+                [style]="{
+                  'text-decoration: line-through': todoItem.isCompleted
+                }"
+                >{{ todoItem.description }}</span
+              >
             </li>
           </ul>
         </ng-template>
@@ -70,9 +79,19 @@ export class TodoComponent {
     isCompleted: [false],
   });
 
+  trackById(index: number, todoItem: TodoModel) {
+    return todoItem.id;
+  }
+
   onPost() {
     const todo: TodoModel = Object.assign(this.todoForm.value);
     this.todoStore.addTodo(todo);
     this.todoForm.reset();
+  }
+
+  toggleCompletion(todoItem: TodoModel) {
+    todoItem.isCompleted = !todoItem.isCompleted;
+    this.todoStore.updateTodo(todoItem);
+    // do something
   }
 }

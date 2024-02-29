@@ -114,4 +114,18 @@ export class TodoStore
       )
     );
   });
+
+  readonly updateTodo = this.effect<TodoModel>((trigger$) => {
+    return trigger$.pipe(
+      tap((_) => this.setLoading()),
+      switchMap((todoItem) =>
+        this.todoService.updateTodo(todoItem).pipe(
+          tapResponse(
+            () => this.updateTodoItem(todoItem),
+            (error: HttpErrorResponse) => this.setError(error)
+          )
+        )
+      )
+    );
+  });
 }

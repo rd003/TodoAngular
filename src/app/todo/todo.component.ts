@@ -9,6 +9,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
+import { TodoModel } from "./todo.model";
 
 @Component({
   selector: `app-todo`,
@@ -70,6 +71,8 @@ export class TodoComponent {
   });
 
   onPost() {
-    const todo = this.todoForm.value;
+    const todo: TodoModel = Object.assign(this.todoForm.value);
+    this.todoStore.addTodo(todo);
+    this.todoForm.reset();
   }
 }

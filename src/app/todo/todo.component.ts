@@ -45,7 +45,9 @@ import { TodoModel } from "./todo.model";
               />
               <span
                 [style]="{
-                  'text-decoration: line-through': todoItem.isCompleted
+                  'text-decoration': todoItem.isCompleted
+                    ? ' line-through'
+                    : 'none'
                 }"
                 >{{ todoItem.description }}</span
               >
@@ -55,7 +57,7 @@ import { TodoModel } from "./todo.model";
       </div>
       <div
         class="form-container"
-        style="display:flex;gap:10px;align-items:center"
+        style="display:flex;gap:10px;align-items:center;"
       >
         <form [formGroup]="todoForm" (ngSubmit)="onPost()">
           <input type="text" formControlName="description" />

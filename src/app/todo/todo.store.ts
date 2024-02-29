@@ -128,4 +128,18 @@ export class TodoStore
       )
     );
   });
+
+  readonly deleteTodo = this.effect<number>((trigger$) => {
+    return trigger$.pipe(
+      tap((_) => this.setLoading()),
+      switchMap((id) =>
+        this.todoService.deleteTodo(id).pipe(
+          tapResponse(
+            () => this.deleteTodoItem(id),
+            (error: HttpErrorResponse) => this.setError(error)
+          )
+        )
+      )
+    );
+  });
 }
